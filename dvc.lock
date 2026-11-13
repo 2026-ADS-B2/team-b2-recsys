@@ -1,0 +1,23 @@
+schema: '2.0'
+stages:
+  clean:
+    cmd: python src/data/clean.py
+    deps:
+    - path: data/raw
+      hash: md5
+      md5: ff7791951628c1dfee8c8036fa7c25ca.dir
+      size: 3294793
+      nfiles: 4
+    - path: src/data/clean.py
+      hash: md5
+      md5: b4799753f216e2f0952f5da1588a50ae
+      size: 2370
+    outs:
+    - path: data/processed/movies.parquet
+      hash: md5
+      md5: d56dc27de2538a9ce9f89acc595b724f
+      size: 257452
+    - path: data/processed/ratings.parquet
+      hash: md5
+      md5: 518dc1587b5ae1064a728802c0ae0a7c
+      size: 1026085
