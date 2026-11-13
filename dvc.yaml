@@ -1,0 +1,9 @@
+stages:
+  clean:
+    cmd: python src/data/clean.py
+    deps:
+      - src/data/clean.py
+      - data/raw
+    outs:
+      - data/processed/ratings.parquet
+      - data/processed/movies.parquet
