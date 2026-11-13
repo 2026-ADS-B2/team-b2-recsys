@@ -7,3 +7,13 @@ stages:
     outs:
       - data/processed/ratings.parquet
       - data/processed/movies.parquet
+  split:
+    cmd: python src/data/split.py
+    deps:
+      - src/data/split.py
+      - data/processed/ratings.parquet
+    params:
+      - split.test_size
+    outs:
+      - data/processed/train.parquet
+      - data/processed/test.parquet

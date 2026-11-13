@@ -21,3 +21,26 @@ stages:
       hash: md5
       md5: 518dc1587b5ae1064a728802c0ae0a7c
       size: 1026085
+  split:
+    cmd: python src/data/split.py
+    deps:
+    - path: data/processed/ratings.parquet
+      hash: md5
+      md5: 518dc1587b5ae1064a728802c0ae0a7c
+      size: 1026085
+    - path: src/data/split.py
+      hash: md5
+      md5: 030e8ae5d2e1baf797f1f157e9afd567
+      size: 1277
+    params:
+      params.yaml:
+        split.test_size: 0.2
+    outs:
+    - path: data/processed/test.parquet
+      hash: md5
+      md5: b5e9a2e19d601e47e2ea34d5920ee3a8
+      size: 235574
+    - path: data/processed/train.parquet
+      hash: md5
+      md5: fe2d855b612f38144942a978afa4edda
+      size: 812524
