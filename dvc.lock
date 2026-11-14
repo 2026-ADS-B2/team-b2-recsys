@@ -44,3 +44,27 @@ stages:
       hash: md5
       md5: fe2d855b612f38144942a978afa4edda
       size: 812524
+  train:
+    cmd: python src/models/train.py
+    deps:
+    - path: data/processed/movies.parquet
+      hash: md5
+      md5: d56dc27de2538a9ce9f89acc595b724f
+      size: 257452
+    - path: data/processed/train.parquet
+      hash: md5
+      md5: fe2d855b612f38144942a978afa4edda
+      size: 812524
+    - path: src/models/train.py
+      hash: md5
+      md5: d121c8eec101ebd33deb33a3a3e2e401
+      size: 4039
+    params:
+      params.yaml:
+        train.min_ratings: 50
+        train.n: 10
+    outs:
+    - path: reports/run.json
+      hash: md5
+      md5: fd63d2f95491bdfca7cc517e9cba2498
+      size: 139

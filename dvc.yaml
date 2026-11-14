@@ -17,3 +17,15 @@ stages:
     outs:
       - data/processed/train.parquet
       - data/processed/test.parquet
+  train:
+    cmd: python src/models/train.py
+    deps:
+      - src/models/train.py
+      - data/processed/train.parquet
+      - data/processed/movies.parquet
+    params:
+      - train.n
+      - train.min_ratings
+    outs:
+      - reports/run.json:
+          cache: false

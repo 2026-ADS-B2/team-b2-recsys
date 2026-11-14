@@ -12,3 +12,4 @@ mlartifacts/
 # Secrets and OS files
 .env
 .DS_Store
+mlflow.db
