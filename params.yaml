@@ -1,2 +1,5 @@
 split:
   test_size: 0.2
+train:
+  n: 10
+  min_ratings: 50
