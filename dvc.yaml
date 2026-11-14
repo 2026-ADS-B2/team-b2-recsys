@@ -29,3 +29,12 @@ stages:
     outs:
       - reports/run.json:
           cache: false
+  evaluate:
+    cmd: python src/models/evaluate.py
+    deps:
+      - src/models/evaluate.py
+      - reports/run.json
+      - data/processed/test.parquet
+    metrics:
+      - reports/metrics.json:
+          cache: false

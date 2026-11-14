@@ -68,3 +68,23 @@ stages:
       hash: md5
       md5: fd63d2f95491bdfca7cc517e9cba2498
       size: 139
+  evaluate:
+    cmd: python src/models/evaluate.py
+    deps:
+    - path: data/processed/test.parquet
+      hash: md5
+      md5: b5e9a2e19d601e47e2ea34d5920ee3a8
+      size: 235574
+    - path: reports/run.json
+      hash: md5
+      md5: fd63d2f95491bdfca7cc517e9cba2498
+      size: 139
+    - path: src/models/evaluate.py
+      hash: md5
+      md5: a1e9381b7ea6c96326c5bf3ac6fe9f14
+      size: 1735
+    outs:
+    - path: reports/metrics.json
+      hash: md5
+      md5: 79d929eebcaaef08766ba4fc9ac86e72
+      size: 31
