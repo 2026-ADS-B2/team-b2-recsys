@@ -52,3 +52,32 @@ dvc pull
 ```
 
 > `--local` saves your credentials in `.dvc/config.local`, which is not committed to Git. Never commit your token.
+
+## How to start MLflow
+
+Run these from the repository root (so MLflow finds `mlflow.db` and `mlruns/`):
+
+```
+source .venv/bin/activate
+mlflow server --port 5000
+```
+
+Open http://localhost:5000 → experiment **recsys** shows the training runs (params, `precision_at_10`, model),
+and **Models** shows `movie-recommender`.
+
+### Register the model as @champion
+
+After `dvc repro`, register the model from the latest run (`reports/run.json`):
+
+```
+python src/models/register.py
+```
+
+This creates a new version of `movie-recommender` (version 1 the first time) and sets the alias `champion` on it.
+Running it again for the same run does not create a duplicate version.
+Load the model anywhere (e.g. in the API) with:
+
+```python
+import mlflow
+model = mlflow.pyfunc.load_model("models:/movie-recommender@champion")
+```
