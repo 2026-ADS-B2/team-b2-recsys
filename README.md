@@ -82,9 +82,11 @@ import mlflow
 model = mlflow.pyfunc.load_model("models:/movie-recommender@champion")
 ```
 
-## How to run the movie app (mock version)
+## How to run the movie app
 
-The movie recommendation app uses mock data stored in `app/mock_response.json`.
+The movie recommendation app first tries to get recommendations from the API at `http://localhost:8000/recommend`.
+
+If the API is unavailable or takes longer than 3 seconds to respond, the app displays popular movies using the mock data stored in `app/mock_response.json`.
 
 To launch the app, run the following command from the repository root:
 
@@ -95,5 +97,3 @@ streamlit run app/movie_app.py --server.port 8502
 Open http://localhost:8502 in your browser.
 
 Enter a user ID and click **Recommend** to see the recommended movies and their scores.
-
-Currently, the app uses mock recommendations. API integration will be added in a later task.
