@@ -1,9 +1,11 @@
 import json
 from pathlib import Path
 
+import requests
 import streamlit as st
 
-# Load mock recommendations
+# API and mock data
+API_URL = "http://localhost:8000/recommend"
 MOCK_FILE = Path(__file__).parent / "mock_response.json"
 
 with open(MOCK_FILE, "r", encoding="utf-8") as file:
@@ -11,7 +13,7 @@ with open(MOCK_FILE, "r", encoding="utf-8") as file:
 
 # App title
 st.title("Movie Recommender 🎬")
-st.write("Find movies you might enjoy!")
+st.write("Find your next watch!")
 
 # User input
 user_id = st.number_input(
@@ -22,12 +24,24 @@ user_id = st.number_input(
 
 # Recommend button
 if st.button("Recommend"):
-    if user_id == mock_response["user_id"]:
-        recommendations = mock_response["items"]
-    else:
-        recommendations = mock_response["items"]
+    try:
+        response = requests.get(
+            API_URL,
+            params={"user_id": int(user_id), "n": 10},
+            timeout=3
+        )
+        response.raise_for_status()
 
-    st.subheader(f"Recommended movies for user {user_id}")
+        recommendations = response.json()["items"]
+        st.subheader(f"Recommended movies for user {user_id}")
+
+    except (requests.RequestException, ValueError, KeyError):
+        recommendations = mock_response["items"]
+        st.info(
+            "The recommendation service is currently unavailable. "
+            "Here are some popular movies!"
+        )
+        st.subheader("Popular now")
 
     for movie in recommendations:
         st.write(f"**{movie['title']}** — Score: {movie['score']:.2f}")
