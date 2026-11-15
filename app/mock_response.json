@@ -1,30 +1,10 @@
 {
   "user_id": 1,
   "items": [
-    {
-      "movie_id": 318,
-      "title": "The Shawshank Redemption",
-      "score": 0.93
-    },
-    {
-      "movie_id": 296,
-      "title": "Pulp Fiction",
-      "score": 0.89
-    },
-    {
-      "movie_id": 593,
-      "title": "The Silence of the Lambs",
-      "score": 0.85
-    },
-    {
-      "movie_id": 356,
-      "title": "Forrest Gump",
-      "score": 0.82
-    },
-    {
-      "movie_id": 2571,
-      "title": "The Matrix",
-      "score": 0.79
-    }
+    {"movie_id": 164909, "title": "La La Land", "score": 0.93},
+    {"movie_id": 122906, "title": "Black Panther", "score": 0.89},
+    {"movie_id": 112556, "title": "Gone Girl", "score": 0.85},
+    {"movie_id": 117529, "title": "Jurassic World", "score": 0.82},
+    {"movie_id": 115713, "title": "Ex Machina", "score": 0.79}
   ]
 }
