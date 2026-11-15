@@ -97,3 +97,80 @@ streamlit run app/movie_app.py --server.port 8502
 Open http://localhost:8502 in your browser.
 
 Enter a user ID and click **Recommend** to see the recommended movies and their scores.
+
+## How to run the project
+
+Follow these steps from the repository root.
+
+### 1. Install dependencies
+
+Create and activate a virtual environment, then install the requirements:
+
+```bash
+python -m venv .venv
+source .venv/bin/activate
+pip install -r requirements.txt
+```
+
+### 2. Download the data
+
+Make sure you have configured your DagsHub credentials as explained in the **How to get the data** section above.
+
+Download the project data:
+
+```bash
+dvc pull
+```
+
+### 3. Run the data pipeline
+
+Run all pipeline stages (cleaning, splitting, training and evaluation):
+
+```bash
+dvc repro
+```
+
+### 4. Start MLflow
+
+Start the MLflow server:
+
+```bash
+source .venv/bin/activate
+mlflow server --port 5000
+```
+
+Open http://localhost:5000 to access the MLflow UI.
+
+### 5. Register the model
+
+Open a new terminal, activate the virtual environment and run:
+
+```bash
+source .venv/bin/activate
+python src/models/register.py
+```
+
+This registers the trained model as `movie-recommender` and assigns it the `champion` alias.
+
+### 6. Start the API
+
+Open another terminal and start the FastAPI service.
+
+**API start command: to be added by Mirari.**
+
+The API should be available at `http://localhost:8000`.
+
+### 7. Start the Streamlit apps
+
+Open a new terminal, activate the virtual environment and start the movie recommendation app:
+
+```bash
+source .venv/bin/activate
+streamlit run app/movie_app.py --server.port 8502
+```
+
+Open http://localhost:8502 to use the movie recommender.
+
+**Data dashboard:** start command to be added when the dashboard is available.
+
+**Important:** MLflow and the API need to keep running in their own terminals while you use the app. The movie app can still display mock recommendations if the API isn't available.
