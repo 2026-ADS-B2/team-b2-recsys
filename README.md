@@ -190,8 +190,16 @@ streamlit run app/movie_app.py --server.port 8502
 
 Open http://localhost:8502 to use the movie recommender.
 
-**Data dashboard:** start command to be added when the dashboard is available.
 
+### Data quality dashboard
+
+The data dashboard displays key dataset statistics, the rating distribution, the most popular genres and data quality checks.
+
+Make sure the data has been downloaded and the quality report has been generated with:
+
+```bash
+dvc pull
+dvc repro quality
 **Important:** MLflow and the API need to keep running in their own terminals while you use the app. The movie app can still display mock recommendations if the API isn't available.
 
 
