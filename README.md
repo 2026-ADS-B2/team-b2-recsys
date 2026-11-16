@@ -53,6 +53,25 @@ dvc pull
 
 > `--local` saves your credentials in `.dvc/config.local`, which is not committed to Git. Never commit your token.
 
+## Data quality report 
+
+The data quality report is generated from the processed Parquet files and saved to `reports/quality.json`.
+
+To generate or update the report, run:
+
+```bash
+dvc repro quality
+```
+
+The report includes:
+- Total number of rows.
+- Number of distinct users and movies.
+- Missing values per column.
+- Duplicate counts.
+- Rating distribution.
+
+The quality report is integrated into the DVC pipeline as the `quality` stage.
+
 ## How to start MLflow
 
 Run these from the repository root (so MLflow finds `mlflow.db` and `mlruns/`):
@@ -174,3 +193,6 @@ Open http://localhost:8502 to use the movie recommender.
 **Data dashboard:** start command to be added when the dashboard is available.
 
 **Important:** MLflow and the API need to keep running in their own terminals while you use the app. The movie app can still display mock recommendations if the API isn't available.
+
+
+ 
