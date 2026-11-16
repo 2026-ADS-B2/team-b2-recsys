@@ -38,3 +38,13 @@ stages:
     metrics:
       - reports/metrics.json:
           cache: false
+  quality:
+    cmd: python src/data/quality.py
+    deps:
+      - src/data/quality.py
+      - data/raw/ratings.csv
+      - data/raw/movies.csv
+      - data/processed/ratings.parquet
+      - data/processed/movies.parquet
+    outs:
+      - reports/quality.json
