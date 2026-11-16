@@ -10,16 +10,16 @@ stages:
       nfiles: 4
     - path: src/data/clean.py
       hash: md5
-      md5: 0f18ed93736c3fb94021f3fab286ddb8
-      size: 2425
+      md5: b4799753f216e2f0952f5da1588a50ae
+      size: 2370
     outs:
     - path: data/processed/movies.parquet
       hash: md5
-      md5: 4e5cc168f8914fd485ef2b408edf7718
+      md5: d56dc27de2538a9ce9f89acc595b724f
       size: 257452
     - path: data/processed/ratings.parquet
       hash: md5
-      md5: 40b616ab3223c2e7f951f296fc49ec07
+      md5: 518dc1587b5ae1064a728802c0ae0a7c
       size: 1026085
   split:
     cmd: python src/data/split.py
@@ -88,31 +88,3 @@ stages:
       hash: md5
       md5: 79d929eebcaaef08766ba4fc9ac86e72
       size: 31
-  quality:
-    cmd: python src/data/quality.py
-    deps:
-    - path: data/processed/movies.parquet
-      hash: md5
-      md5: 4e5cc168f8914fd485ef2b408edf7718
-      size: 257452
-    - path: data/processed/ratings.parquet
-      hash: md5
-      md5: 40b616ab3223c2e7f951f296fc49ec07
-      size: 1026085
-    - path: data/raw/movies.csv
-      hash: md5
-      md5: ed94fab72b62442ef8150d9446e000d6
-      size: 494431
-    - path: data/raw/ratings.csv
-      hash: md5
-      md5: 325a6f09399d1c45671f187505e1a100
-      size: 2483723
-    - path: src/data/quality.py
-      hash: md5
-      md5: f649a7076b6ebf904db6e615bec1aec9
-      size: 5343
-    outs:
-    - path: reports/quality.json
-      hash: md5
-      md5: bb282bec2e37e193cff9220cf14d3362
-      size: 1578
