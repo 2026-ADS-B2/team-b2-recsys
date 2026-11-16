@@ -61,3 +61,20 @@ def test_quality_report_detects_duplicates_and_rating_distribution():
     assert rating_metrics["rating_distribution"] == {"4.0": 2, "5.0": 1}
     assert movie_metrics["duplicate_rows"] == 1
     assert movie_metrics["duplicate_movie_ids"] == 1
+
+def test_ratings_parquet_has_expected_columns(tmp_path):
+    expected_columns = {"user_id", "movie_id", "rating", "timestamp"}
+
+    ratings = pd.DataFrame({
+        "user_id": [1, 2],
+        "movie_id": [10, 20],
+        "rating": [4.0, 3.5],
+        "timestamp": [1000, 2000],
+    })
+
+    parquet_path = tmp_path / "ratings.parquet"
+    ratings.to_parquet(parquet_path, index=False)
+
+    loaded_ratings = pd.read_parquet(parquet_path)
+
+    assert expected_columns.issubset(set(loaded_ratings.columns))

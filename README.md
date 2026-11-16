@@ -190,7 +190,6 @@ streamlit run app/movie_app.py --server.port 8502
 
 Open http://localhost:8502 to use the movie recommender.
 
-
 ### Data quality dashboard
 
 The data dashboard displays key dataset statistics, the rating distribution, the most popular genres and data quality checks.
@@ -200,7 +199,33 @@ Make sure the data has been downloaded and the quality report has been generated
 ```bash
 dvc pull
 dvc repro quality
+```
+
+Start the dashboard from the repository root:
+
+```bash
+streamlit run app/dashboard.py --server.port 8501
+```
+
+Open http://localhost:8501 in your browser.
+
+### Continuous Integration 
+
+GitHub Actions automatically runs the test suite on every pull request and on pushes to the `main` branch.
+
+The workflow is defined in `.github/workflows/ci.yml`.
+
+To run the tests locally:
+
+```bash
+python -m pytest -q
+```
+
+
+
 **Important:** MLflow and the API need to keep running in their own terminals while you use the app. The movie app can still display mock recommendations if the API isn't available.
+
+
 
 
  
