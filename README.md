@@ -175,7 +175,16 @@ This registers the trained model as `movie-recommender` and assigns it the `cham
 
 Open another terminal and start the FastAPI service.
 
-**API start command: to be added by Mirari.**
+Make sure MLflow is running and the model is registered (steps 4 and 5), then run from the repository root:
+
+```bash
+source .venv/bin/activate
+uvicorn api.main:app --port 8000
+```
+
+On Windows (Git Bash) activate with `source .venv/Scripts/activate`.
+
+Check it: http://localhost:8000/health shows the model version, and http://localhost:8000/docs shows the API documentation.
 
 The API should be available at `http://localhost:8000`.
 
@@ -226,6 +235,11 @@ python -m pytest -q
 **Important:** MLflow and the API need to keep running in their own terminals while you use the app. The movie app can still display mock recommendations if the API isn't available.
 
 
+## Demo
 
+The step-by-step demo script for the sprint review is in [`docs/demo.md`](docs/demo.md).
+
+Quick order: `dvc repro` → MLflow (5000) → `register.py` → API (8000) → movie app (8502) → dashboard (8501).
+Note: the baseline model recommends the same most popular movies to every user; personalised models come in Sprint 2.
 
  
