@@ -78,11 +78,27 @@ Run these from the repository root (so MLflow finds `mlflow.db` and `mlruns/`):
 
 ```
 source .venv/bin/activate
-mlflow server --port 5000
+mlflow server --backend-store-uri sqlite:///mlflow.db --port 5000
 ```
+
+> **Mac users:** port 5000 is used by AirPlay Receiver, so use `--port 5001` and open http://localhost:5001 instead.
 
 Open http://localhost:5000 → experiment **recsys** shows the training runs (params, `precision_at_10`, model),
 and **Models** shows `movie-recommender`.
+
+### Build and register the model with one command
+
+`reports/run.json` points to the MLflow run of whoever trained the model last, and that run only exists
+on their laptop. So if you never trained the model yourself, `dvc repro` skips training ("didn't change")
+and `register.py` fails with `Run with id=... not found`. To build everything from scratch and get
+`movie-recommender@champion` locally, run:
+
+```
+./scripts/train_and_register.sh
+```
+
+It runs `dvc pull` → `dvc repro -f` (forces all stages, including training) → `python src/models/register.py`.
+Then start MLflow (see above) and check **Models → movie-recommender** has the alias `champion`.
 
 ### Register the model as @champion
 
@@ -155,10 +171,13 @@ Start the MLflow server:
 
 ```bash
 source .venv/bin/activate
-mlflow server --port 5000
+mlflow server --backend-store-uri sqlite:///mlflow.db --port 5000
 ```
 
-Open http://localhost:5000 to access the MLflow UI.
+Open http://localhost:5000 to access the MLflow UI (Mac: use `--port 5001`, port 5000 is taken by AirPlay).
+
+> **First time / never trained the model?** Steps 2, 3 and 5 can be replaced by one command:
+> `./scripts/train_and_register.sh`
 
 ### 5. Register the model
 
