@@ -1,10 +1,5 @@
-
-"""Streamlit dashboard for MovieLens data quality and basic dataset insights (T9)."""
-from __future__ import annotations
-
 import json
 from pathlib import Path
-
 import pandas as pd
 import streamlit as st
 
@@ -12,20 +7,18 @@ REPORT_PATH = Path("reports/quality.json")
 MOVIES_PATH = Path("data/processed/movies.parquet")
 RATINGS_PATH = Path("data/processed/ratings.parquet")
 
-
 st.set_page_config(
-    page_title="MovieLens · Data Dashboard",
-    page_icon="🎬",
+    page_title="MovieLens Dataset",
     layout="wide",
 )
 
-st.title("🎬 MovieLens — Data Dashboard")
-st.caption("Dataset overview, rating distribution and data quality checks")
+st.title("MovieLens dataset")
+st.write("Overview of the dataset and its quality.")
 
 if not REPORT_PATH.exists():
     st.warning(
-        "reports/quality.json was not found. "
-        "Run `dvc repro quality` from the project root first."
+        "Quality report not found. "
+        "Run `dvc repro quality` from the project root."
     )
     st.stop()
 
@@ -36,101 +29,136 @@ processed = quality.get("processed", {})
 rating_info = processed.get("ratings", {})
 movie_info = processed.get("movies", {})
 
-c1, c2, c3, c4 = st.columns(4)
 
-c1.metric("Ratings", f"{rating_info.get('rows', 0):,}")
-c2.metric("Users", f"{rating_info.get('users', 0):,}")
-c3.metric(
+st.header("Dataset overview")
+
+col1, col2, col3, col4 = st.columns(4)
+
+col1.metric("Ratings", f"{rating_info.get('rows', 0):,}")
+col2.metric("Users", f"{rating_info.get('users', 0):,}")
+col3.metric(
     "Movies",
     f"{movie_info.get('unique_movies', rating_info.get('movies', 0)):,}",
 )
-c4.metric(
+col4.metric(
     "Duplicate ratings",
     f"{rating_info.get('duplicate_user_movie_pairs', 0):,}",
 )
 
-st.subheader("Rating Distribution")
+
+st.header("Rating distribution")
 
 distribution = rating_info.get("rating_distribution", {})
 
 if distribution:
     rating_series = pd.Series(distribution, dtype="int64")
     rating_series.index = rating_series.index.astype(str)
-    st.bar_chart(rating_series)
+    st.bar_chart(rating_series, y_label="Number of ratings")
 else:
-    st.info("The report does not contain the rating distribution.")
+    st.info("Rating distribution is not available.")
 
-st.subheader("Most Popular Genres")
 
-if MOVIES_PATH.exists():
+st.header("Genre analysis")
+
+if MOVIES_PATH.exists() and RATINGS_PATH.exists():
     movies = pd.read_parquet(MOVIES_PATH)
+    ratings = pd.read_parquet(RATINGS_PATH)
 
     if "genres" in movies.columns:
-        genre_counts: dict[str, int] = {}
+        genre_data = movies[["movie_id", "genres"]].copy()
 
-        for genres in movies["genres"].dropna():
-            if isinstance(genres, str):
-                # Also supports data created before genres were stored as lists.
-                genres = genres.split("|")
+        genre_data["genres"] = genre_data["genres"].apply(
+            lambda x: x.split("|") if isinstance(x, str)
+            else x.tolist() if hasattr(x, "tolist")
+            else x if isinstance(x, (list, tuple, set))
+            else []
+        )
 
-            if hasattr(genres, "tolist"):
-                genres = genres.tolist()
+        genre_data = genre_data.explode("genres")
 
-            if isinstance(genres, (list, tuple, set)):
-                for genre in genres:
-                    if genre and genre != "(no genres listed)":
-                        genre_counts[str(genre)] = (
-                            genre_counts.get(str(genre), 0) + 1
-                        )
-        if genre_counts:
-            top_genres = (
-                pd.Series(genre_counts)
-                .sort_values(ascending=False)
-                .head(10)
-            )
-            st.bar_chart(top_genres)
-        else:
-            st.info("No genres are available.")
+        genre_data = genre_data[
+            genre_data["genres"].notna()
+            & (genre_data["genres"] != "")
+            & (genre_data["genres"] != "(no genres listed)")
+        ]
+
+
+        common_genres = (
+            genre_data.groupby("genres")["movie_id"]
+            .nunique()
+            .sort_values(ascending=False)
+        )
+
+        st.subheader("Most common genres")
+        st.caption("Number of movies associated with each genre.")
+
+        st.bar_chart(
+            common_genres,
+            horizontal=True,
+            y_label="Number of movies",
+        )
+
+        
+        genre_ratings = genre_data.merge(
+            ratings[["movie_id", "rating"]],
+            on="movie_id",
+            how="inner",
+        )
+
+        highest_rated_genres = (
+        genre_ratings.groupby("genres")["rating"]
+        .mean()
+        .sort_values(ascending=False)
+        )
+
+        st.subheader("Highest-rated genres")
+        st.caption("Average rating of movies in each genre.")
+        
+        st.bar_chart(
+            highest_rated_genres,
+            horizontal=True,
+            y_label="Average rating",
+        )
+
     else:
         st.info("The movies table does not contain a genres column.")
+
 else:
-    st.info("data/processed/movies.parquet was not found.")
+    st.info("Processed movies or ratings data is not available.")
 
-st.subheader("Data Quality Checks")
 
-quality_tabs = st.tabs(["Ratings", "Movies"])
+st.header("Data quality")
 
-with quality_tabs[0]:
-    st.write("**Missing values by column**")
+left, right = st.columns(2)
+
+with left:
+    st.subheader("Ratings")
+
+    st.write("Missing values by column")
     st.json(rating_info.get("missing_values", {}))
 
-    st.metric(
-        "Duplicate rows",
-        rating_info.get("duplicate_rows", 0),
-    )
-    st.metric(
-        "Duplicate user-movie pairs",
+    st.write("Duplicate rows:", rating_info.get("duplicate_rows", 0))
+    st.write(
+        "Duplicate user-movie pairs:",
         rating_info.get("duplicate_user_movie_pairs", 0),
     )
 
-with quality_tabs[1]:
-    st.write("**Missing values by column**")
+with right:
+    st.subheader("Movies")
+
+    st.write("Missing values by column")
     st.json(movie_info.get("missing_values", {}))
 
-    st.metric(
-        "Duplicate rows",
-        movie_info.get("duplicate_rows", 0),
-    )
-    st.metric(
-        "Duplicate movie IDs",
+    st.write("Duplicate rows:", movie_info.get("duplicate_rows", 0))
+    st.write(
+        "Duplicate movie IDs:",
         movie_info.get("duplicate_movie_ids", 0),
     )
 
-with st.expander("View full JSON report"):
+with st.expander("View complete quality report"):
     st.json(quality)
 
 if "raw" in quality:
     st.caption(
-        "The report also includes metrics from the original CSV files "
-        "in the raw section."
+        "The report also contains statistics from the original CSV files."
     )
