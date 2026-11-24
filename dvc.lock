@@ -109,10 +109,18 @@ stages:
       size: 2483723
     - path: src/data/quality.py
       hash: md5
-      md5: f649a7076b6ebf904db6e615bec1aec9
-      size: 5343
+      md5: 9b3e25ee0826c02d0ec01772f6d6b4b8
+      size: 13183
+    params:
+      params.yaml:
+        quality:
+          min_ratings_per_user: 20
+          min_ratings_per_movie: 1
+          rating_min: 0.5
+          rating_max: 5.0
+          earliest_timestamp: '1995-01-01'
     outs:
     - path: reports/quality.json
       hash: md5
-      md5: 85dabfeb39311f8365eeba9145791a9b
-      size: 1501
+      md5: 716bf94d501f45ab8b1f47f02c1d62f3
+      size: 3704

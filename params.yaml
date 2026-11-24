@@ -3,3 +3,9 @@ split:
 train:
   n: 10
   min_ratings: 50
+quality:
+  min_ratings_per_user: 20
+  min_ratings_per_movie: 1
+  rating_min: 0.5
+  rating_max: 5.0
+  earliest_timestamp: "1995-01-01"

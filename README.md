@@ -72,6 +72,28 @@ The report includes:
 
 The quality report is integrated into the DVC pipeline as the `quality` stage.
 
+
+### Validation checks
+
+The report also contains named validation checks in `checks`, and a summary in `summary`:
+
+| Check | Passes when |
+|---|---|
+| `nonempty_data` | ratings and movies both have rows |
+| `required_columns` | ratings have `user_id, movie_id, rating, timestamp`; movies have `movie_id, title, year, genres` |
+| `no_nulls` | no missing values in required columns (`year` may be missing, it is reported for information) |
+| `valid_half_step_ratings` | every rating is between 0.5 and 5.0 in steps of 0.5 |
+| `known_movie_ids` | every rated movie exists in the movie metadata |
+| `unique_user_movie_ratings` | each user rated each movie at most once |
+| `valid_timestamps` | timestamps are valid dates between 1995-01-01 and today |
+| `min_ratings_per_user` | every user has at least `quality.min_ratings_per_user` ratings (20) |
+| `min_ratings_per_movie` | every rated movie has at least `quality.min_ratings_per_movie` ratings (1) |
+
+Each check has the form `{"passed": true/false, "details": {...}}`; `details` explains a failure
+(counts and examples). `summary` holds `total`, `passed`, `failed`, `failed_checks` and `all_passed`.
+Thresholds are set in `params.yaml` under `quality`. A failed check does not stop the pipeline:
+it is reported so the dashboard can show it.
+
 ## How to start MLflow
 
 Run these from the repository root (so MLflow finds `mlflow.db` and `mlruns/`):
