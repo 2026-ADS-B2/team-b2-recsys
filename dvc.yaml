@@ -48,3 +48,12 @@ stages:
       - data/processed/movies.parquet
     outs:
       - reports/quality.json
+  catalog:
+    cmd: python src/data/catalog.py
+    deps:
+      - src/data/catalog.py
+      - data/processed/movies.parquet
+      - data/processed/ratings.parquet
+      - data/raw/links.csv
+    outs:
+      - data/processed/catalog.parquet
