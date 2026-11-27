@@ -138,5 +138,5 @@ stages:
     outs:
     - path: data/processed/catalog.parquet
       hash: md5
-      md5: 920a4b15ab74ce3a954e3b7e4d83f181
-      size: 578721
+      md5: ce29aeecc1333d37212b038de4de56eb
+      size: 879709

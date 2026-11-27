@@ -13,3 +13,4 @@ mlartifacts/
 .env
 .DS_Store
 mlflow.db
+.streamlit/secrets.toml
