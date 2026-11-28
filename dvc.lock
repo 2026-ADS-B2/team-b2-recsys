@@ -125,3 +125,27 @@ stages:
       hash: md5
       md5: 85dabfeb39311f8365eeba9145791a9b
       size: 1501
+  catalog:
+    cmd: python src/data/catalog.py
+    deps:
+    - path: data/processed/movies.parquet
+      hash: md5
+      md5: d56dc27de2538a9ce9f89acc595b724f
+      size: 257452
+    - path: data/processed/ratings.parquet
+      hash: md5
+      md5: 518dc1587b5ae1064a728802c0ae0a7c
+      size: 1026085
+    - path: data/raw/links.csv
+      hash: md5
+      md5: 316913f95cdad64c745ca22f3630e230
+      size: 197979
+    - path: src/data/catalog.py
+      hash: md5
+      md5: d5d789df06faa66588cd843cda4ff25d
+      size: 3449
+    outs:
+    - path: data/processed/catalog.parquet
+      hash: md5
+      md5: 920a4b15ab74ce3a954e3b7e4d83f181
+      size: 578721
