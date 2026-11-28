@@ -23,6 +23,7 @@ def split_train_val_test(ratings: pd.DataFrame, test_size: float, val_size: floa
     n_ratings = df.groupby("user_id")["movie_id"].transform("size")
 
     n_test = (n_ratings * test_size).astype(int).clip(lower=1)
+    n_test = n_test.clip(upper=n_ratings - 1)   # a user with one rating keeps it in train
     n_val = (n_ratings * val_size).astype(int)
     if val_size > 0:
         n_val = n_val.clip(lower=1)
