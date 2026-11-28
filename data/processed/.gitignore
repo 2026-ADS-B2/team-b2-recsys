@@ -2,4 +2,5 @@
 /movies.parquet
 /train.parquet
 /test.parquet
+/val.parquet
 /catalog.parquet

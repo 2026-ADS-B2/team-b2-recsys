@@ -1,0 +1,31 @@
+{
+  "train": {
+    "rows": 71078,
+    "share": 0.7049,
+    "users": 610,
+    "movies": 7551,
+    "first_rating": "1996-03-29 18:36:55",
+    "last_rating": "2018-09-17 04:23:36"
+  },
+  "val": {
+    "rows": 9818,
+    "share": 0.0974,
+    "users": 610,
+    "movies": 4095,
+    "first_rating": "1996-03-29 18:36:56",
+    "last_rating": "2018-09-17 04:25:01"
+  },
+  "test": {
+    "rows": 19940,
+    "share": 0.1977,
+    "users": 610,
+    "movies": 6245,
+    "first_rating": "1996-03-29 18:36:56",
+    "last_rating": "2018-09-24 14:27:30"
+  },
+  "total_rows": 100836,
+  "params": {
+    "test_size": 0.2,
+    "val_size": 0.1
+  }
+}
