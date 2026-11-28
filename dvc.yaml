@@ -50,6 +50,8 @@ stages:
       - data/raw/movies.csv
       - data/processed/ratings.parquet
       - data/processed/movies.parquet
+    params:
+      - quality
     outs:
       - reports/quality.json
   catalog:
