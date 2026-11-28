@@ -11,7 +11,7 @@
 | `app/` | Streamlit apps (movie app, data dashboard) |
 | `docs/` | Architecture and task documentation |
 | `tests/` | Unit tests |
-| `reports/` | Generated reports (quality.json, metrics.json) |
+| `reports/` | Generated reports (quality.json, metrics.json, split_sizes.json) |
 
 ## Setup
 
@@ -52,6 +52,25 @@ dvc pull
 ```
 
 > `--local` saves your credentials in `.dvc/config.local`, which is not committed to Git. Never commit your token.
+
+## Train / validation / test split
+
+The `split` stage (`src/data/split.py`) splits ratings **per user, by time**:
+
+| Partition | File | Share | What it is |
+|---|---|---|---|
+| train | `data/processed/train.parquet` | ~70% | each user's earliest ratings, used for training |
+| validation | `data/processed/val.parquet` | ~10% | the ratings just before test, used to tune models (e.g. k in kNN) |
+| test | `data/processed/test.parquet` | ~20% | each user's latest ratings, used only for the final evaluation |
+
+- Shares are set in `params.yaml` (`split.test_size`, `split.val_size`).
+- The test partition is identical to Sprint 1, so new models can be compared with the baseline.
+- Every user keeps at least one rating in train.
+- Partition sizes (rows, users, movies, share, date range) are written to `reports/split_sizes.json`.
+
+```bash
+dvc repro split
+```
 
 ## Data quality report 
 

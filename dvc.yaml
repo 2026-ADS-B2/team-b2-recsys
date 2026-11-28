@@ -14,9 +14,13 @@ stages:
       - data/processed/ratings.parquet
     params:
       - split.test_size
+      - split.val_size
     outs:
       - data/processed/train.parquet
+      - data/processed/val.parquet
       - data/processed/test.parquet
+      - reports/split_sizes.json:
+          cache: false
   train:
     cmd: python src/models/train.py
     deps:
@@ -50,3 +54,12 @@ stages:
       - quality
     outs:
       - reports/quality.json
+  catalog:
+    cmd: python src/data/catalog.py
+    deps:
+      - src/data/catalog.py
+      - data/processed/movies.parquet
+      - data/processed/ratings.parquet
+      - data/raw/links.csv
+    outs:
+      - data/processed/catalog.parquet
