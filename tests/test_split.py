@@ -85,6 +85,14 @@ def test_every_user_keeps_at_least_one_train_rating():
 
     assert len(train) == 1 and len(val) == 0 and len(test) == 1
 
+def test_user_with_one_rating_stays_in_train():
+    ratings = pd.DataFrame(
+        {"user_id": [1], "movie_id": [10], "rating": [4.0], "timestamp": [1]}
+    )
+
+    train, val, test = split_train_val_test(ratings, test_size=0.2, val_size=0.1)
+
+    assert len(train) == 1 and len(val) == 0 and len(test) == 0
 
 def test_split_sizes_report_counts_each_partition():
     train, val, test = split_train_val_test(make_ratings(), test_size=0.2, val_size=0.1)
